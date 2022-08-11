@@ -27,10 +27,9 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.primary) {
                     Column() {
-                        TopBarView("计算器",{})
+                        TopBarView("计算器", {})
                         caculater()
                     }
-
                 }
             }
         }
@@ -38,116 +37,64 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CurrentScreen(value:String,operator:String,value2:String){
-    Text(modifier = Modifier
-        .fillMaxWidth()
-        .padding(10.dp, 0.dp, 10.dp, 0.dp)
-        .background(Color.White) ,text = value + operator + value2, fontSize = 50.sp, textAlign = TextAlign.End, color = Color.Black)
-}
-
-@Composable
-fun ResultScreen(value: String){
-    Text(modifier = Modifier
-        .fillMaxWidth()
-        .padding(10.dp, 0.dp, 10.dp, 0.dp)
-        .background(Color.White) ,text = "=$value", fontSize = 30.sp, textAlign = TextAlign.End, color = Color.Black
+fun CurrentScreen(value: String, operator: String, value2: String) {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp, 0.dp, 10.dp, 0.dp)
+            .background(Color.White),
+        text = value + operator + value2,
+        fontSize = 50.sp,
+        textAlign = TextAlign.End,
+        color = Color.Black
     )
 }
 
 @Composable
-fun Keyboard(callback:(value:String) -> Unit,caculate:()->Unit,operator:(value:String) -> Unit,del:() -> Unit){
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-        Column() {
-            Button(onClick = { operator("ac");caculate() }, Modifier.background(Color.Gray)) {
-                Text("AC")
-            }
-            Button(onClick = { callback("7") }) {
-                Text("7")
-            }
-            Button(onClick = { callback("4") }) {
-                Text("4")
-            }
-            Button(onClick = { callback("1") }) {
-                Text("1")
-            }
-            Button(onClick = { /*TODO*/ }) {
-                Text("")
-            }
-        }
-        Column {
-            Button(onClick = { del()}) {
-                Text("DEL")
-            }
-            Button(onClick = { callback("8") }) {
-                Text("8")
-            }
-            Button(onClick = { callback("5")}) {
-                Text("5")
-            }
-            Button(onClick = { callback("2")}) {
-                Text("2")
-            }
-            Button(onClick = { callback("0")}) {
-                Text("0")
-            }
-        }
-        Column {
-            Button(onClick = { operator("%") }) {
-                Text("%")
-            }
-            Button(onClick = { callback("9") }) {
-                Text("9")
-            }
-            Button(onClick = { callback("6") }) {
-                Text("6")
-            }
-            Button(onClick = {callback("3")}) {
-                Text("3")
-            }
-            Button(onClick = { callback(".") }) {
-                Text(".")
-            }
-        }
-        Column {
-            Button(onClick = { operator("÷") }) {
-                Text("÷")
-            }
-            Button(onClick = { operator("×") }) {
-                Text("×")
-            }
-            Button(onClick = { operator("-") }) {
-                Text("-")
-            }
-            Button(onClick = { operator("+") }) {
-                Text("+")
-            }
-            Button(onClick = { operator("=");caculate() }) {
-                Text("=")
-            }
-        }
-    }
-}
-@Composable
-fun Keybord2(keyCharts:Array<Array<String>>,onclick:(i:Int,j:Int) -> Unit){
-        Row(modifier = Modifier
+fun ResultScreen(value: String) {
+    Text(
+        modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(), horizontalArrangement = Arrangement.SpaceAround){
-            for(i in 0..3){
-                Column(
-                    Modifier
-                        .fillMaxHeight()
-                        .padding(0.dp, 30.dp),verticalArrangement = Arrangement.SpaceAround) {
-                    for(j in 0..4){
-                        Button(modifier = Modifier.weight(1f,true).padding(0.dp,10.dp),onClick = { onclick(j,i) }, colors = ButtonDefaults.buttonColors(
+            .padding(10.dp, 0.dp, 10.dp, 0.dp)
+            .background(Color.White),
+        text = "=$value",
+        fontSize = 30.sp,
+        textAlign = TextAlign.End,
+        color = Color.Black
+    )
+}
+
+@Composable
+fun Keybord2(keyCharts: Array<Array<String>>, onclick: (i: Int, j: Int) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(), horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        for (i in 0..3) {
+            Column(
+                Modifier
+                    .fillMaxHeight()
+                    .padding(0.dp, 30.dp), verticalArrangement = Arrangement.SpaceAround
+            ) {
+                for (j in 0..4) {
+                    Button(
+                        modifier = Modifier
+                            .weight(1f, true)
+                            .padding(0.dp, 10.dp),
+                        onClick = { onclick(j, i) },
+                        colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color.LightGray,
-                        )) {
-                            Text(text = keyCharts[j][i], fontSize = 18.sp, color = Color.Black)
-                        }
+                        )
+                    ) {
+                        Text(text = keyCharts[j][i], fontSize = 18.sp, color = Color.Black)
                     }
                 }
             }
+        }
     }
 }
+
 @Composable
 fun TopBarView(title: String, callback: () -> Unit) {
     Column() {
@@ -162,40 +109,43 @@ fun TopBarView(title: String, callback: () -> Unit) {
             }
         })
     }
-        
+
 }
+
 @Composable
-fun caculater(){
-    val keyChars = arrayOf(arrayOf("C","DEL","%","÷"), arrayOf("7","8","9","×"),
-        arrayOf("4","5","6","-"), arrayOf("1","2","3","+"), arrayOf("","0",".","="))
+fun caculater() {
+    val keyChars = arrayOf(
+        arrayOf("C", "DEL", "%", "÷"), arrayOf("7", "8", "9", "×"),
+        arrayOf("4", "5", "6", "-"), arrayOf("1", "2", "3", "+"), arrayOf("", "0", ".", "=")
+    )
     var number1 by remember { mutableStateOf("0") }
     var operator by remember { mutableStateOf("") }
     var number2 by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("0") }
-    fun del(){
-        if(number2 != ""){
+    fun del() {
+        if (number2 != "") {
 
-        }else if(operator != ""){
+        } else if (operator != "") {
             operator = ""
-        }else if(number1.length > 1){
-            number1 = number1.substring(0,number1.length-1)
-        }else{
+        } else if (number1.length > 1) {
+            number1 = number1.substring(0, number1.length - 1)
+        } else {
             number1 = "0"
         }
     }
 
-    fun caculate(){
+    fun caculate() {
         val num1 = number1.toFloat()
         val num2 = number2.toFloat()
-        when(operator){
+        when (operator) {
             "÷" -> {
-                if(num2 == 0f){
+                if (num2 == 0f) {
                     result = "除数不能为0"
-                }else{
+                } else {
                     result = (num1 / num2).toString()
                 }
             }
-            "×" ->{
+            "×" -> {
                 result = (num1 * num2).toString()
             }
             "+" -> {
@@ -208,41 +158,38 @@ fun caculater(){
                 result = (num1 % num2).toString()
             }
         }
-
     }
 
 
-    fun input(char:String){
-        if(operator == ""){
+    fun input(char: String) {
+        if (operator == "") {
             //输入的数字1
-            if(char!= "."){
-                if(number1 == "0"){
+            if (char != ".") {
+                if (number1 == "0") {
                     number1 = char
-                }else{
+                } else {
                     number1 += char
                 }
-            }else{
+            } else {
                 number1 += char
             }
-        }else{
+        } else {
             //数字2
-            if(char!= "."){
-                if(number2 == "0"){
+            if (char != ".") {
+                if (number2 == "0") {
                     number2 = char
-                }else{
+                } else {
                     number2 += char
                 }
-            }else{
+            } else {
                 number2 += char
             }
         }
-
-
     }
 
-    fun keyBoardClick(i:Int,j:Int){
+    fun keyBoardClick(i: Int, j: Int) {
         var char = keyChars[i][j]
-        when(char){
+        when (char) {
             "C" -> {
                 number1 = "0"
                 operator = ""
@@ -252,8 +199,8 @@ fun caculater(){
             "DEL" -> {
                 del()
             }
-            "+","-","×","÷","%" -> {
-                if(operator == ""){
+            "+", "-", "×", "÷", "%" -> {
+                if (operator == "") {
                     operator = char
                 }
 
@@ -269,34 +216,41 @@ fun caculater(){
     }
 
 
-    Column(modifier = Modifier
-        .fillMaxHeight()
-        .background(Color.LightGray)) {
-        Box(modifier = Modifier
-            .weight(1f, true)
-            .background(Color.White), contentAlignment = Alignment.BottomEnd){
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .background(Color.LightGray)
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(1f, true)
+                .background(Color.White), contentAlignment = Alignment.BottomEnd
+        ) {
             Column() {
                 CurrentScreen(value = number1, operator = operator, value2 = number2)
                 ResultScreen(value = result)
             }
         }
         Divider(modifier = Modifier.height(1.dp))
-        Box(modifier = Modifier
-            .weight(2f, true)
-            .fillMaxWidth()
-            .background(Color.White)){
-            Keybord2(keyCharts = keyChars, onclick = {i,j -> keyBoardClick(i,j)})
+        Box(
+            modifier = Modifier
+                .weight(2f, true)
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+            Keybord2(keyCharts = keyChars, onclick = { i, j -> keyBoardClick(i, j) })
         }
     }
 
 
 }
+
 @Preview
 @Composable
-fun previewView(){
-    CaculatorTheme{
+fun previewView() {
+    CaculatorTheme {
         Column() {
-            TopBarView("计算器",{})
+            TopBarView("计算器", {})
             caculater()
         }
 
