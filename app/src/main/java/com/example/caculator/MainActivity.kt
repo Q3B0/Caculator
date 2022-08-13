@@ -124,7 +124,7 @@ fun caculater() {
     var result by remember { mutableStateOf("0") }
     fun del() {
         if (number2 != "") {
-
+            number2 = number2.substring(0, number2.length - 1)
         } else if (operator != "") {
             operator = ""
         } else if (number1.length > 1) {
